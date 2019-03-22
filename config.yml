@@ -1,5 +1,6 @@
 repository: git@gitlab.quartsoft.com:mage2-extensions/mageb2bportal.git
 branch: stage-stable
+http_user: www-data
 deploy_path: /mnt/d/Work/0__Projects/Deployer/Shell/app
 languages: [ru_RU, en_US, pl_PL]
 base_url: http://loc.dep/

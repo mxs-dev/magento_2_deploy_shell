@@ -27,3 +27,15 @@ dep_shared
 # Calling composer install method
 source "$home_dir/src/dep_vendors.sh"
 dep_vendors
+
+# Setting permissions to files and folders
+source "$home_dir/src/dep_writable.sh"
+dep_writable
+
+# Clearing paths
+source "$home_dir/src/dep_clear_path.sh"
+dep_clear_path
+
+# Deploying Magento 2
+source "$home_dir/src/dep_magento2.sh"
+dep_magento_2
