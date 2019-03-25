@@ -1,41 +1,41 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2154
-# shellcheck disable=SC1091
-set -e
-home_dir=$PWD
+declare -r home_dir=$PWD;
+declare -A exceptions
+
+source "$home_dir/src/functions.sh"
+source "$home_dir/src/parse_yaml.sh"
+
+source "$home_dir/src/dep_prepare.sh"
+source "$home_dir/src/dep_release.sh"
+source "$home_dir/src/dep_update_code.sh"
+source "$home_dir/src/dep_shared.sh"
+source "$home_dir/src/dep_vendors.sh"
+source "$home_dir/src/dep_writable.sh"
+source "$home_dir/src/dep_clear_path.sh"
+source "$home_dir/src/magento/magento2.sh"
+
 
 # Reading configuration
-source "$home_dir/src/parse_yaml.sh"
 create_variables ./config.yml
 
-# Prepairing host for deploy
-source "$home_dir/src/dep_prepare.sh"
-dep_prepare
+declare -a tasks=(
+    "dep_prepare"       # Prepairing host for deploy
+    "dep_release"       # Creating a folder for new release
+    "dep_update_code"   # Downloading code for new release
+    # "dep_shared"        # Creating shared folders
+    # "dep_vendors"       # Calling composer install method
+    # "dep_writable"      # Setting permissions to files and folders
+    # "dep_clear_path"    # Clearing paths
+    # "dep_magento_2"     # Deploying Magento 2
+);
 
-# Creating a folder for new release
-source "$home_dir/src/dep_release.sh"
-dep_release 
-
-# Downloading code for new release
-source "$home_dir/src/dep_update_code.sh"
-dep_update_code
-
-# Creating shared folders
-source "$home_dir/src/dep_shared.sh"
-dep_shared
-
-# Calling composer install method
-source "$home_dir/src/dep_vendors.sh"
-dep_vendors
-
-# Setting permissions to files and folders
-source "$home_dir/src/dep_writable.sh"
-dep_writable
-
-# Clearing paths
-source "$home_dir/src/dep_clear_path.sh"
-dep_clear_path
-
-# Deploying Magento 2
-source "$home_dir/src/dep_magento2.sh"
-dep_magento_2
+try
+(
+for task in ${tasks[*]}
+    do  
+        ${task}
+    done
+) 
+catch || {
+    printError "${exceptions[$ex_code]}"
+}

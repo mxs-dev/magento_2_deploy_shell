@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-writable_dirs=("pub/static" "pub/media")
-permissions="0777"
+declare -a writable_dirs=(
+    "pub/static"
+    "pub/media"
+);
+declare -r permissions="0777";
 
 function dep_writable () {
     cd $current_release 

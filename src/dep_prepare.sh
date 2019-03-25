@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1003
+declare shared_dir='shared';
+declare releases_dir='releases';
 
-shared_dir='shared'
-releases_dir='releases'
+# Declaring exceptions for current script 
+exceptions["100"]="Error: deploy_path is not writable";
 
-# $deploy_path - global variable from config
 function dep_prepare() {    
+    # Checking if $deploy_path is writable
+    if [[ ! -w $deploy_path ]]; then
+        exit 100;
+    fi
+
+    exit 100;
+
     if [[ ! -d $deploy_path ]]; then 
         mkdir -p $deploy_path
     fi
