@@ -5,6 +5,8 @@ shared_dirs=("pub/media" "var/log")
 shared_files=("app/etc/env.php")
 
 function dep_shared () {
+    printf "Running: dep_shared.\n";
+
     # Creating shared folders
     for dir in ${shared_dirs[*]}
     do  

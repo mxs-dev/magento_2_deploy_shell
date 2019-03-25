@@ -56,26 +56,26 @@ function m2_install () {
     local isDBClear=isDatabaseClear;
     local isEnvFileExists=$(test -s "$current_release/app/etc/env.php");
 
-    echo isEnvFileExists; exit 1;
-
-    # if [[ !$isEnvFileExists && $isDBClear ]]; then
-    #     printf "Installing Magento 2... \n";
-    #     $(cd $current_release && $command);
-    # else 
-    # if [[ !$isEnvFileExists && !$isDBClear ]]; then
-    #     printf "Selected database is not clear.\n";
-    #     read -p "Do you want to cleanup it during Magento 2 installation?  (y/n)" run_cleanup
+    if [[ !$isEnvFileExists && $isDBClear ]]; then
+        printf "Installing Magento 2... \n";
+        $(cd $current_release && $command);
+    elif [[ !$isEnvFileExists && !$isDBClear ]]; then
+        printf "Selected database is not clear.\n";
+        read -p "Do you want to cleanup it during Magento 2 installation?  (y/n)" run_cleanup
         
-    #     if [[ $run_cleanup=='y' || $run_cleanup=='Y' ]]; then
-    #         command+=" --cleanup-database=true";
-    #     fi
+        if [[ $run_cleanup=='y' || $run_cleanup=='Y' ]]; then
+            command+=" --cleanup-database=true";
+        fi
 
-    #     printf "Installing Magento 2 with cleanup... \n";
-    #     $(cd $current_release && $command)
-    # else 
-    # if [[ $isEnvFileExists && $isDBClear ]]; then
-    #     exit 213;
-    # else 
-    #     printf "Skipped -> Magento 2 is already installed.\n";
-    # fi
+        printf "Installing Magento 2 with cleanup... \n";
+        $(cd $current_release && $command)
+    elif [[ $isEnvFileExists && $isDBClear ]]; then
+        exit 213;
+    else 
+        printf "Skipped -> Magento 2 is already installed.\n";
+    fi
+}
+
+function m2_di_compile () {
+    echo $(php -d memory_limit=-1 setup:di:compile);
 }

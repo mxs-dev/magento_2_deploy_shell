@@ -7,6 +7,8 @@ declare -a writable_dirs=(
 declare -r permissions="0777";
 
 function dep_writable () {
+    printf "Running: dep_writable.\n";
+
     cd $current_release 
 
     # Processing Magneto2 Installation Guide commands
