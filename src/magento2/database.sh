@@ -13,11 +13,10 @@ function m2_db_create () {
     if [ $up -lt 0 ]; then
         throw 200;
     else 
-        printf "Creating a database ${db_dbname}\n";
-        echo $(mysql -h${db_host} -u${db_username} -p${db_password} -e "${query}");
+        $(mysql -h${db_host} -u${db_username} -p${db_password} -e "${query}");
     fi
 }
 
 function m2_db_upgrade () {
-    echo $(cd $current_release && php -d memory_limit=-1 bin/magento setup:upgrade --keep-generated);
+    $(cd $current_release && php -d memory_limit=-1 bin/magento setup:upgrade --keep-generated);
 }

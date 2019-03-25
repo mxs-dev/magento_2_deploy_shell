@@ -4,12 +4,13 @@ exceptions["210"]="Error: base_url and backend_url is required fields.";
 exceptions["211"]="Error: db(host, dbname, username, password) are required fields.";
 exceptions["212"]="Error: default_admin(name, password, email) are required fields.";
 exceptions["213"]="Error: Your installation has env.php file, but selected database is clear.";
+exceptions["214"]="Error: Magento2 setup:install commaind failed.";
 
 function isDatabaseClear () {
     local query="SELECT COUNT(*) FROM information_schema.TABLES WHERE (table_schema = \"${db_dbname}\");";
     local tables_count=$(mysql -h$db_host -u$db_username -p$db_password  -s -N -e "$query");
 
-    echo $tables_count -le 0;
+    echo $([ $tables_count -le 0 ]);
 }
 
 function m2_install () {
@@ -52,34 +53,32 @@ function m2_install () {
         command+=" --language=en_US";
     fi
 
-    local isDBClear=isDatabaseClear;
+    local isDBClear=$(isDatabaseClear);
     local isEnvFileExists=$(test -s "$current_release/app/etc/env.php");
 
-    if [[ !$isEnvFileExists && $isDBClear ]]; then
-        printf "Installing Magento 2... \n";
-
-        # Removing empty env.php
-        rm -f "$shared_path/app/etc/env.php";
-
-        cd $current_release && $command;
-    elif [[ !$isEnvFileExists && !$isDBClear ]]; then
+  
+    if [[ !$isEnvFileExists && !$isDBClear ]]; then
         printf "Selected database is not clear.\n";
-        read -p "Do you want to cleanup it during Magento 2 installation?  (y/n)" run_cleanup
+        read -p "Do you want to run DB cleanup during the Magento 2 installation (y/n) ?  " run_cleanup
         
-        if [[ $run_cleanup=='y' || $run_cleanup=='Y' ]]; then
-            command+=" --cleanup-database=true";
+        if [[ "$run_cleanup" = 'y' || "$run_cleanup" = 'Y' ]]; then
+            printf "Installing Magento 2 with cleanup... \n";
+            command+=" --cleanup-database";
         fi
-
-        # Removing empty env.php
-        rm -f "$shared_path/app/etc/env.php";
-
-        printf "Installing Magento 2 with cleanup... \n";
-        cd $current_release && $command
     elif [[ $isEnvFileExists && $isDBClear ]]; then
-        exit 213;
+        throw 213;
     else 
         printf "Skipped -> Magento 2 is already installed.\n";
     fi
+
+    
+    # Removing empty env.php
+    rm -f "$shared_path/app/etc/env.php";
+
+    cd $current_release && $command;
+    if [[ $? -ne 0 ]]; then
+        throw 214;
+    fi;
 }
 
 function m2_di_compile () {
