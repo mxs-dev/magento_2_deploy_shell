@@ -6,7 +6,7 @@ function m2_deploy_mode_set () {
     fi
 }
 
-function m2_deploy_assets () {
+function m2_deploy_assets () {    
     local languages_string="";
     local flag="";
 

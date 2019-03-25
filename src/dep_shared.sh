@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-shared_path="$deploy_path/$shared_dir"
-shared_dirs=("pub/media" "var/log")
-shared_files=("app/etc/env.php")
+declare -a shared_dirs=("pub/media" "var/log");
+declare -a shared_files=("app/etc/env.php");
 
 function dep_shared () {
-    printf "Running: dep_shared.\n";
+    declare shared_path="${deploy_path}/${shared_dir}";
 
     # Creating shared folders
     for dir in ${shared_dirs[*]}

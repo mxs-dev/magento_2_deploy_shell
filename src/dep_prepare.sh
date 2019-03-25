@@ -7,11 +7,9 @@ exceptions["100"]="Error: deploy_path is not writable";
 
 function dep_prepare() {    
     # Checking if $deploy_path is writable
-    # if [[ ! -w $deploy_path ]]; then
-    #     exit 100;
-    # fi
-
-    printf "Running: dep_prepare.\n";
+    if [[ ! -w $(dirname $deploy_path) ]]; then
+        exit 100;
+    fi
 
     if [[ ! -d $deploy_path ]]; then 
         mkdir -p $deploy_path

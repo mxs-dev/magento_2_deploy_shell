@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
+exceptions["150"]="Error: composer install - failed."
+
 function dep_vendors () {
-    printf "Running: dep_vendors.\n";    
-    local res=$(cd $current_release && composer install);
+    cd $current_release 
+        && composer install
+
+    if [[ $? -ne 0 ]]; then
+        throw 150;
+    fi;
 }

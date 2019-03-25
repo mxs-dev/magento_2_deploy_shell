@@ -26,39 +26,42 @@ function m2_install () {
     fi
 
     local command="php -d memory_limit=-1 bin/magento setup:install";
-    command+=" --db-host=\"${db_host}\"";
-    command+=" --db-name=\"${db_dbname}\"";
-    command+=" --db-user=\"${db_username}\"";
-    command+=" --db-password=\"${db_password}\"";
+    command+=" --db-host=${db_host}";
+    command+=" --db-name=${db_dbname}";
+    command+=" --db-user=${db_username}";
+    command+=" --db-password=${db_password}";
 
-    command+=" --base-url=\"${base_url}\"";
-    command+=" --backend-frontname=\"${backend_url}\"";
+    command+=" --base-url=${base_url}";
+    command+=" --backend-frontname=${backend_url}";
 
-    command+=" --admin-user=\"${default_admin_name}\"";
-    command+=" --admin-firstname=\"${default_admin_name}\"";
-    command+=" --admin-lastname=\"${default_admin_name}\"";
-    command+=" --admin-email=\"${default_admin_email}\"";
-    command+=" --admin-password=\"${default_admin_password}\"";
+    command+=" --admin-user=${default_admin_name}";
+    command+=" --admin-firstname=${default_admin_name}";
+    command+=" --admin-lastname=${default_admin_name}";
+    command+=" --admin-email=${default_admin_email}";
+    command+=" --admin-password=${default_admin_password}";
 
-    command+=" --use-rewrites=\"1\"";
+    command+=" --use-rewrites=1";
 
     if [[ ! -z $db_prefix ]]; then 
-        command+=" --db-prefix=\"${db_prefix}\"";
+        command+=" --db-prefix=${db_prefix}";
     fi
 
     if [[ ! -z $default_language ]]; then   
-        command+=" --language=\"${default_language}\"";
+        command+=" --language=${default_language}";
     else
-        command+=" --language=\"en_US\"";
+        command+=" --language=en_US";
     fi
-
 
     local isDBClear=isDatabaseClear;
     local isEnvFileExists=$(test -s "$current_release/app/etc/env.php");
 
     if [[ !$isEnvFileExists && $isDBClear ]]; then
         printf "Installing Magento 2... \n";
-        $(cd $current_release && $command);
+
+        # Removing empty env.php
+        rm -f "$shared_path/app/etc/env.php";
+
+        cd $current_release && $command;
     elif [[ !$isEnvFileExists && !$isDBClear ]]; then
         printf "Selected database is not clear.\n";
         read -p "Do you want to cleanup it during Magento 2 installation?  (y/n)" run_cleanup
@@ -67,8 +70,11 @@ function m2_install () {
             command+=" --cleanup-database=true";
         fi
 
+        # Removing empty env.php
+        rm -f "$shared_path/app/etc/env.php";
+
         printf "Installing Magento 2 with cleanup... \n";
-        $(cd $current_release && $command)
+        cd $current_release && $command
     elif [[ $isEnvFileExists && $isDBClear ]]; then
         exit 213;
     else 
@@ -77,5 +83,5 @@ function m2_install () {
 }
 
 function m2_di_compile () {
-    echo $(php -d memory_limit=-1 setup:di:compile);
+    echo $(php -d memory_limit=-1 bin/magento setup:di:compile);
 }
