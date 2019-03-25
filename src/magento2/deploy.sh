@@ -10,10 +10,10 @@ function m2_deploy_assets () {
     local languages_string="";
     local flag="";
 
-    if [[ ! -z $languages && -z $default_language ]]; then 
+    if [[ -z $languages && ! -z $default_language ]]; then 
         printf "Using default_language for static-content:deploying\n";
         languages=("${default_language}");
-    elif [[ ! -z $languages &&  ! -z $default_language ]]; then
+    elif [[ -z $languages &&  -z $default_language ]]; then
         printf "Using en_US for static-content:deploying\n";
         languages=("en_US");
     fi  
