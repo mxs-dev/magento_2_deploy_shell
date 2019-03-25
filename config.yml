@@ -3,6 +3,7 @@ branch: stage-stable
 http_user: www-data
 deploy_path: /mnt/d/Work/0__Projects/Deployer/Shell/app
 languages: [ru_RU, en_US, pl_PL]
+default_language: en_US
 base_url: http://loc.dep/
 backend_url: admin
 deploy_mode: developer

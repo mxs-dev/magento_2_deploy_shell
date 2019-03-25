@@ -11,8 +11,6 @@ function dep_prepare() {
         exit 100;
     fi
 
-    exit 100;
-
     if [[ ! -d $deploy_path ]]; then 
         mkdir -p $deploy_path
     fi
