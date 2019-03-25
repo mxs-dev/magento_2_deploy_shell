@@ -4,7 +4,8 @@ exceptions["210"]="Error: base_url and backend_url is required fields.";
 exceptions["211"]="Error: db(host, dbname, username, password) are required fields.";
 exceptions["212"]="Error: default_admin(name, password, email) are required fields.";
 exceptions["213"]="Error: Your installation has env.php file, but selected database is clear.";
-exceptions["214"]="Error: Magento2 setup:install commaind failed.";
+exceptions["214"]="Error: Magento 2 setup:install command failed.";
+exceptions["250"]="Error: Magento 2 setup:di:compule command failed.";
 
 function isDatabaseClear () {
     local query="SELECT COUNT(*) FROM information_schema.TABLES WHERE (table_schema = \"${db_dbname}\");";
@@ -56,7 +57,6 @@ function m2_install () {
     local isDBClear=$(isDatabaseClear);
     local isEnvFileExists=$(test -s "$current_release/app/etc/env.php");
 
-  
     if [[ !$isEnvFileExists && !$isDBClear ]]; then
         printf "Selected database is not clear.\n";
         read -p "Do you want to run DB cleanup during the Magento 2 installation (y/n) ?  " run_cleanup
@@ -69,18 +69,27 @@ function m2_install () {
         throw 213;
     else 
         printf "Skipped -> Magento 2 is already installed.\n";
+        return 0;
     fi
 
-    
-    # Removing empty env.php
-    rm -f "$shared_path/app/etc/env.php";
+    # Temporary removing link to env.php
+    rm -f "$release_path/app/etc/env.php";
 
-    cd $current_release && $command;
+    cd $release_path && $command;
     if [[ $? -ne 0 ]]; then
         throw 214;
     fi;
+
+    # Copying env.php file to shared folder and re-creating symlink to it.
+    mv "$release_path/app/etc/env.php" "$shared_path/app/etc/evn.php";
+    ln -s "$shared_path/app/etc/evn.php" "$release_path/app/etc/env.php";
 }
 
 function m2_di_compile () {
-    echo $(php -d memory_limit=-1 bin/magento setup:di:compile);
+    cd $release_path &&
+        php -d memory_limit=-1 bin/magento setup:di:compile;
+    
+    if [[ $? -ne 0 ]]; then
+        throw 250;
+    fi;
 }
