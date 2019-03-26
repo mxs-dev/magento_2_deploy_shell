@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-declare -r home_dir=`pwd`;
+declare -r home_dir=/home/awx/deploy;
 declare -A exceptions;
 
 source "$home_dir/src/functions.sh"
