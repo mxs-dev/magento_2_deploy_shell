@@ -84,7 +84,7 @@ function m2_install () {
 
     # Copying new env.php file to shared folder and re-creating symlink to it.
     mv "$current_release/app/etc/env.php" "$deploy_path/$shared_dir/app/etc/evn.php";
-    ln -s "$deploy_path/$shared_dir/app/etc/evn.php" "$current_release/app/etc/env.php";
+    ln -sf "$deploy_path/$shared_dir/app/etc/evn.php" "$current_release/app/etc/env.php";
 }
 
 function m2_di_compile () {

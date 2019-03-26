@@ -38,9 +38,9 @@ function logTask () {
 }
 
 function printError() {
-    printf "${BG_RED}\n$1\n\n\033[0m";
+    printf "${BG_RED}\n$1\n\n${RESET}";
 }
 
 function printSuccess() {
-    printf "${GREEN}\n$1\n\n\033[0m";
+    printf "${GREEN}${BOLD}$1\n\n${RESET}";
 }

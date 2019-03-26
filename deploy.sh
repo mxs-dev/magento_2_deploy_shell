@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-declare -r home_dir=/home/awx/deploy;
+declare -r home_dir=$(dirname "$0");
 declare -A exceptions;
 
 source "$home_dir/src/functions.sh"
@@ -20,8 +20,15 @@ source "$home_dir/src/magento2/maintenance.sh"
 source "$home_dir/src/magento2/deploy.sh"
 
 
+if [[ ! -z $1 ]]; then
+    config_path=$1;
+else 
+    config_path="$home_dir/config.yml";
+fi
+
 # Reading configuration
-create_variables $1
+create_variables "$config_path"
+
 
 # Declearing constants
 declare -r shared_dir="shared";
