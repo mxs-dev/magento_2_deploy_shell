@@ -47,10 +47,10 @@ declare -a tasks=(
 
     "m2_db_create"          # Creating database if it doesn`t exists
     "m2_install"            # Installing Magento 2 application
+    "m2_deploy_mode_set"
     "m2_maintenance_enable" 
     "m2_db_upgrade"
     "m2_di_compile"
-    "m2_deploy_mode_set"
     "m2_deploy_assets"
     "m2_cache_clean"
     "m2_maintenance_disable"

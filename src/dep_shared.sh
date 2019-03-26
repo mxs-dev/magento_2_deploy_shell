@@ -19,7 +19,7 @@ function dep_shared () {
         fi
 
         rm -rf "$current_release/$dir"
-        ln -s  "$shared_path/$dir" "$current_release/$dir"
+        ln -sf  "$shared_path/$dir" "$current_release/$dir"
     done    
 
     # Creating shared files
@@ -33,6 +33,6 @@ function dep_shared () {
             touch "$shared_path/$file"
         fi
 
-        ln -s "$shared_path/$file" "$current_release/$file"
+        ln -sf "$shared_path/$file" "$current_release/$file"
     done
 }

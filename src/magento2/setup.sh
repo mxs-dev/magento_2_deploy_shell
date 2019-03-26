@@ -59,13 +59,23 @@ function m2_install () {
     local current_release=$(cd "$deploy_path/$release" && realpath . ); 
 
     if [[ !$isEnvFileExists && !$isDBClear ]]; then
-        printf "Selected database is not clear.\n";
-        read -p "Do you want to run DB cleanup during the Magento 2 installation (y/n) ?  " run_cleanup
-        
-        if [[ "$run_cleanup" = 'y' || "$run_cleanup" = 'Y' ]]; then
-            printf "Installing Magento 2 with cleanup... \n";
-            command+=" --cleanup-database";
-        fi
+        # # # # # # # # # # # # # # # # # # # # # # # # #
+        #   If config has the $db_cleanup entry script  #
+        #   will not ask to run or not db cleanup.      #
+        # # # # # # # # # # # # # # # # # # # # # # # # #
+        if [[ ! -z $db_cleanup ]] ; then 
+            if [[ $db_cleanup == "true" ]]; then
+                command+=" --cleanup-database";
+            fi
+        else 
+            printf "Selected database is not clear.\n";
+            read -p "Do you want to run DB cleanup during the Magento 2 installation (y/n) ?  " run_cleanup
+
+            if [[ "$run_cleanup" = 'y' || "$run_cleanup" = 'Y' ]]; then
+                printf "Installing Magento 2 with cleanup... \n";
+                command+=" --cleanup-database";
+            fi
+        fi;
     elif [[ $isEnvFileExists && $isDBClear ]]; then
         throw 213;
     else 

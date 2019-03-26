@@ -6,8 +6,8 @@ exceptions["270"]="Error: Magento 2 setup:static-content:deploy failed";
 function m2_deploy_mode_set () {
     cd "$deploy_path/$release";
 
-    if [[ -z $deploy_mode ]]; then 
-        php bin/magento deploy:mode:set --skip-compilation;
+    if [[ ! -z $deploy_mode ]]; then 
+        php bin/magento deploy:mode:set $deploy_mode --skip-compilation;
         if [[ $? -ne 0 ]]; then
             throw 260;
         fi;
