@@ -21,7 +21,7 @@ source "$home_dir/src/magento2/deploy.sh"
 
 
 # Reading configuration
-create_variables ./config.yml
+create_variables $1
 
 # Declearing constants
 declare -r shared_dir="shared";
