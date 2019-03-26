@@ -7,7 +7,7 @@ declare -a writable_dirs=(
 declare -r permissions="0777";
 
 function dep_writable () {
-    cd $current_release 
+    cd "$deploy_path/$release";
 
     # Processing Magneto2 Installation Guide commands
     find var generated vendor pub/static pub/media app/etc -type f -exec chmod u+w {} +

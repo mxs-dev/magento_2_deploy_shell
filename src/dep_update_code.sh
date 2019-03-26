@@ -3,7 +3,7 @@
 exceptions["130"]="Error: sode updating - failed.";
 
 function dep_update_code () {    
-    cd $current_release
+    cd "$deploy_path/$release";
 
     if [[ -d .git ]]; then 
         git fetch --all

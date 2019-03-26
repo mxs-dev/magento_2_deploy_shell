@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-declare shared_dir='shared';
-declare releases_dir='releases';
 
 # Declaring exceptions for current script 
 exceptions["100"]="Error: deploy_path is not writable";
 
-function dep_prepare() {    
+function dep_prepare() {
     # Checking if $deploy_path is writable
     if [[ ! -w $(dirname $deploy_path) ]]; then
         exit 100;

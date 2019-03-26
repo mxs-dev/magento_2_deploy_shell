@@ -4,6 +4,8 @@ exceptions["260"]="Error: Magento 2 setup:deploy-mode:set failed";
 exceptions["270"]="Error: Magento 2 setup:static-content:deploy failed";
 
 function m2_deploy_mode_set () {
+    cd "$deploy_path/$release";
+
     if [[ -z $deploy_mode ]]; then 
         php bin/magento deploy:mode:set --skip-compilation;
         if [[ $? -ne 0 ]]; then
@@ -12,7 +14,7 @@ function m2_deploy_mode_set () {
     fi
 }
 
-function m2_deploy_assets () {    
+function m2_deploy_assets () {  
     local languages_string="";
     local flag="";
 
@@ -32,8 +34,8 @@ function m2_deploy_assets () {
         languages_string+=" $lang";
     done
 
-    cd $current_release;
-    php -d memory_limit=-1 bin/magento setup:static-content:deploy ${flag} ${languages_string}
+    cd "$deploy_path/$release" && 
+        php -d memory_limit=-1 bin/magento setup:static-content:deploy ${flag} ${languages_string}
 
     if [[ $? -ne 0 ]]; then
         throw 270;

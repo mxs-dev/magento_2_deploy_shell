@@ -22,7 +22,7 @@ function deleteElderReleases () {
         return 0;
     fi
 
-    cd "$deploy_path/releases";
+    cd "$deploy_path/$releases_dir";
 
     # Getting list of all directories sorted by date ASC
     local releases=( $(ls -t -r .) );
@@ -39,21 +39,21 @@ function deleteElderReleases () {
 }
 
 function dep_release () {
-    current_release="$deploy_path/$releases_dir/$(getReleaseName)"
+    local current_release="$deploy_path/$releases_dir/$(getReleaseName)";
     
     # Making directory if it is a new release
     if [[ ! -d $current_release ]]; then 
         mkdir $current_release
     fi
 
-    #Removing old release-symlink if exists
-    if [[ -L "$deploy_path/release" ]]; then 
-        rm "$deploy_path/release";
+    # Removing old temporary release-symlink if exists
+    if [[ -L "$deploy_path/$release" ]]; then 
+        rm "$deploy_path/$release";
     fi
     
-    # Making symbolic link for current release
-    ln -s  $current_release "$deploy_path/release"
+    # Making temporary symbolic link for current release
+    ln -s  $current_release "$deploy_path/$release"
 
-    # Deleting old releases
+    # Cleaning old releases
     deleteElderReleases
 }

@@ -55,7 +55,7 @@ function m2_install () {
     fi
 
     local isDBClear=$(isDatabaseClear);
-    local isEnvFileExists=$(test -s "$current_release/app/etc/env.php");
+    local isEnvFileExists=$(test -s "$deploy_path/$shared_dir/app/etc/env.php");
 
     if [[ !$isEnvFileExists && !$isDBClear ]]; then
         printf "Selected database is not clear.\n";
@@ -72,21 +72,22 @@ function m2_install () {
         return 0;
     fi
 
-    # Temporary removing link to env.php
-    rm -f "$release_path/app/etc/env.php";
+    # Temporary removing link to env.php and env.php itself.
+    rm -f "$deploy_path/$release/app/etc/env.php";
+    rm -f "$deploy_path/$shared_dir/app/etc/env.php";
 
-    cd $release_path && $command;
+    cd "$deploy_path/$release" && $command;
     if [[ $? -ne 0 ]]; then
         throw 214;
     fi;
 
-    # Copying env.php file to shared folder and re-creating symlink to it.
-    mv "$release_path/app/etc/env.php" "$shared_path/app/etc/evn.php";
-    ln -s "$shared_path/app/etc/evn.php" "$release_path/app/etc/env.php";
+    # Copying new env.php file to shared folder and re-creating symlink to it.
+    mv "$deploy_path/$shared_dir/app/etc/env.php" "$deploy_path/$shared_dir/app/etc/evn.php";
+    ln -s "$deploy_path/$shared_dir/app/etc/evn.php" "$deploy_path/$shared_dir/app/etc/env.php";
 }
 
 function m2_di_compile () {
-    cd $release_path &&
+    cd "$deploy_path/$release" &&
         php -d memory_limit=-1 bin/magento setup:di:compile;
     
     if [[ $? -ne 0 ]]; then

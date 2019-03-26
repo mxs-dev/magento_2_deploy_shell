@@ -22,8 +22,11 @@ source "$home_dir/src/magento2/deploy.sh"
 # Reading configuration
 create_variables ./config.yml
 
-# declare release_path="$deploy_path/release";
-# declare shared_path="$deploy_path/shared";
+# Declearing constants
+declare -r shared_dir="shared";
+declare -r releases_dir="releases";
+declare -r release="release";
+declare -r current="current";
 
 declare -a tasks=(
     "dep_prepare"       # Prepairing host for deploy

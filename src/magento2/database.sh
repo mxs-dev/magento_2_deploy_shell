@@ -23,8 +23,8 @@ function m2_db_create () {
 }
 
 function m2_db_upgrade () {
-    cd $current_release && 
-    php -d memory_limit=-1 bin/magento setup:upgrade --keep-generated
+    cd "$deploy_path/$release" && 
+        php -d memory_limit=-1 bin/magento setup:upgrade --keep-generated
 
     if [[ $? -ne 0 ]]; then
         throw 240;
