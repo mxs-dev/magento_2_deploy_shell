@@ -21,9 +21,9 @@
             password: *******
             email: email@example.com
         db:
-            host: 127.0.0.1
-            dbname: b2b_new
-            username: root
-            password: root
+            host: localhost
+            dbname:   ***
+            username: ***
+            password: ***
 
 
