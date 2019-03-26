@@ -56,6 +56,7 @@ function m2_install () {
 
     local isDBClear=$(isDatabaseClear);
     local isEnvFileExists=$(test -s "$deploy_path/$shared_dir/app/etc/env.php");
+    local current_release=$(cd "$deploy_path/$release" && realpath . ); 
 
     if [[ !$isEnvFileExists && !$isDBClear ]]; then
         printf "Selected database is not clear.\n";
@@ -73,17 +74,17 @@ function m2_install () {
     fi
 
     # Temporary removing link to env.php and env.php itself.
-    rm -f "$deploy_path/$release/app/etc/env.php";
+    rm -f "$current_release/app/etc/env.php";
     rm -f "$deploy_path/$shared_dir/app/etc/env.php";
 
-    cd "$deploy_path/$release" && $command;
+    cd "$current_release" && $command;
     if [[ $? -ne 0 ]]; then
         throw 214;
     fi;
 
     # Copying new env.php file to shared folder and re-creating symlink to it.
-    mv "$deploy_path/$shared_dir/app/etc/env.php" "$deploy_path/$shared_dir/app/etc/evn.php";
-    ln -s "$deploy_path/$shared_dir/app/etc/evn.php" "$deploy_path/$shared_dir/app/etc/env.php";
+    mv "$current_release/app/etc/env.php" "$deploy_path/$shared_dir/app/etc/evn.php";
+    ln -s "$deploy_path/$shared_dir/app/etc/evn.php" "$current_release/app/etc/env.php";
 }
 
 function m2_di_compile () {

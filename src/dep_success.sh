@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function dep_success () {
-    local current_release = $(cd "$deploy_path/release" && realpath . ); 
+    local current_release=$(cd "$deploy_path/$release" && realpath . ); 
 
     #Removing temporary release-symlink
     if [[ -L "$deploy_path/$release" ]]; then 

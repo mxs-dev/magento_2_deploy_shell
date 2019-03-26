@@ -12,6 +12,7 @@ source "$home_dir/src/dep_shared.sh"
 source "$home_dir/src/dep_vendors.sh"
 source "$home_dir/src/dep_writable.sh"
 source "$home_dir/src/dep_clear_path.sh"
+source "$home_dir/src/dep_success.sh"
 
 source "$home_dir/src/magento2/database.sh"
 source "$home_dir/src/magento2/setup.sh"
@@ -46,6 +47,8 @@ declare -a tasks=(
     "m2_deploy_assets"
     "m2_cache_clean"
     "m2_maintenance_disable"
+    
+    "dep_success"
 );
 
 try

@@ -28,9 +28,13 @@ declare -r RED="\033[0;31m";
 declare -r BG_RED="\033[41m";
 declare -r GREEN="\033[0;32m";
 declare -r BG_GREEN="\033[42m";
+declare -r YELLOW="\e[93m";
+
+declare -r BOLD="\e[1m";
+declare -r RESET="\e[0m";
 
 function logTask () {
-    printf "${GREEN}Running:\033[0m ${1}.\n";
+    printf "${YELLOW}${BOLD}Running:${RESET} ${1}.\n";
 }
 
 function printError() {
