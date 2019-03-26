@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-declare -r home_dir=$PWD;
+declare -r home_dir='pwd';
 declare -A exceptions;
 
 source "$home_dir/src/functions.sh"
