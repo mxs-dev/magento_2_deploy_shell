@@ -3,6 +3,7 @@
 declare -a writable_dirs=(
     "pub/static"
     "pub/media"
+    "var/"
 );
 declare -r permissions="0777";
 

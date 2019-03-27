@@ -5,6 +5,10 @@ exceptions["130"]="Error: sode updating - failed.";
 function dep_update_code () {    
     cd "$deploy_path/$release";
 
+    if [[ -z $branch ]]; then
+        branch="master";
+    fi
+
     if [[ -d .git ]]; then 
         git fetch --all
         git reset --hard origin/$branch
